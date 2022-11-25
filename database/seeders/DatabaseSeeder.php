@@ -18,30 +18,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        create_default_user();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        create_default_videos();
 
-        //USER
-        User::create([
-            'email' => 'sergiturbadenas@gmail.com',
-            'name' => 'Sergi Tur Badenas',
-            'password' => Hash::make(config('casteaching.default_user.password'))
-
-
-        ]);
-
-        Video::create([
-            'title' => 'Title here',
-            'description' => 'Description here',
-            'url' => 'https://youtu.be/w8j07_DBl_I',
-            'published_at' => Carbon::parse('December 13, 2020 8:00pm'),
-            'previous' => null,
-            'next' => null,
-            'series_id' => 1
-        ]);
     }
 }
