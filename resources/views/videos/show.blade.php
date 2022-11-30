@@ -1,5 +1,7 @@
-<ul>
+<x-casteaching-layout>
     <p>{{ $video->title }}</p>
-    <li>Description: {{ $video->description }}</li>
-    <li>{{ $video->published_at->format('F d') }}</li>
-</ul>
+    <ul>
+        <li>Description: {{ $video->description }}</li>
+        <li>{{ $video->published_at->format('F d') }}</li>
+    </ul>
+</x-casteaching-layout>

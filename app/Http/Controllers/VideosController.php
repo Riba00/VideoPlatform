@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Video;
-use Illuminate\Http\Request;
-use Tests\Feature\Videos\Test;
 use Tests\Feature\Videos\VideoTest;
 
 class VideosController extends Controller
@@ -19,9 +17,5 @@ class VideosController extends Controller
         return view('videos.show',[
             'video' => Video::findOrFail($id)
         ]);
-
-
-
-
     }
 }

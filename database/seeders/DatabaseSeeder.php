@@ -22,5 +22,6 @@ class DatabaseSeeder extends Seeder
 
         create_default_videos();
 
+
     }
 }
