@@ -26,4 +26,5 @@ class Video extends Model
         return optional($this->published_at)->diffForHumans(Carbon::now());
     }
 
+
 }
