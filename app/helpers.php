@@ -35,7 +35,6 @@ if (!function_exists('create_default_videos')) {
             'next' => null,
             'series_id' => 1
         ]);
-
     }
 }
 
@@ -52,7 +51,6 @@ if (!function_exists('create_regular_user')) {
         return $user;
     }
 }
-
 
 if (!function_exists('create_superadmin_user')) {
     function create_superadmin_user()
@@ -86,7 +84,6 @@ if (!function_exists('add_personal_team')) {
     }
 }
 
-
 if (!function_exists('create_video_manager_user')) {
     function create_video_manager_user()
     {
@@ -102,7 +99,6 @@ if (!function_exists('create_video_manager_user')) {
         return $user;
     }
 }
-
 
 if (!function_exists('define_gates')) {
     function define_gates()
@@ -122,5 +118,24 @@ if (!function_exists('create_permissions')) {
     }
 }
 
-
-
+if (!function_exists('create_sample_videos')) {
+    function create_sample_videos()
+    {
+        $video1 = Video::create([
+            'title' => 'Video 1',
+            'description' => 'Descripcio video 1',
+            'url' => 'https://www.youtube.com/watch?v=zyABmm6Dw64&list=PLyasg1A0hpk07HA0VCApd4AGd3Xm45LQv&index=5'
+        ]);
+        $video2 = Video::create([
+            'title' => 'Video 2',
+            'description' => 'Descripcio video 2',
+            'url' => 'https://www.youtube.com/watch?v=q06GbMP1h_s&list=PLyasg1A0hpk07HA0VCApd4AGd3Xm45LQv&index=2'
+        ]);
+        $video3 = Video::create([
+            'title' => 'Video 3',
+            'description' => 'Descripcio video 3',
+            'url' => 'https://www.youtube.com/watch?v=ofSbYUEml4c&list=PLyasg1A0hpk07HA0VCApd4AGd3Xm45LQv&index=9&t=1520s'
+        ]);
+        return collect([$video1,$video2,$video3]);
+    }
+}
