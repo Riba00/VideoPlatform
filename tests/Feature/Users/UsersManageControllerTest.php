@@ -71,7 +71,7 @@ class UsersManageControllerTest extends TestCase
 
     private function loginAsUsersManager()
     {
-        Auth::login(create_users_manager_user());
+        Auth::login(create_user_manager_user());
     }
 
     private function loginAsSuperAdmin()

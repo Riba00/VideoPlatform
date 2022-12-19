@@ -94,14 +94,16 @@ if (!function_exists('create_video_manager_user')) {
         ]);
 
         Permission::create(['name' => 'videos_manage_index']);
+        Permission::create(['name' => 'videos_manage_create']);
         $user->givePermissionTo('videos_manage_index');
+        $user->givePermissionTo('videos_manage_create');
         add_personal_team($user);
         return $user;
     }
 }
 
-if (!function_exists('create_users_manager_user')) {
-    function create_users_manager_user(){
+if (!function_exists('create_user_manager_user')) {
+    function create_user_manager_user(){
         $user = User::create([
             'name' => 'UserManager',
             'email' => 'usersmanager@casteaching.com',
@@ -133,6 +135,7 @@ if (!function_exists('create_permissions')) {
     {
         Permission::firstOrCreate(['name' => 'videos_manage_index']);
         Permission::firstOrCreate(['name' => 'users_manage_index']);
+        Permission::firstOrCreate(['name' => 'videos_manage_create']);
     }
 }
 
