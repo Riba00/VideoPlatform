@@ -1,5 +1,33 @@
 <x-casteaching-layout>
+
     <div class="mt-10 flex flex-col">
+        @if(session()->has('status'))
+            <div class="rounded-md bg-green-50 p-4">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <!-- Heroicon name: mini/check-circle -->
+                        <svg class="h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-green-800">Successfully created</p>
+                    </div>
+                    <div class="ml-auto pl-3">
+                        <div class="-mx-1.5 -my-1.5">
+                            <button type="button" class="inline-flex rounded-md bg-green-50 p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 focus:ring-offset-green-50">
+                                <span class="sr-only">Dismiss</span>
+                                <!-- Heroicon name: mini/x-mark -->
+                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         @can('videos_manage_create')
             <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
@@ -13,13 +41,14 @@
                             </div>
                             <div class="mt-5 md:col-span-2 md:mt-0">
                                 <form data-qa="form_video_create" action="#" method="POST">
+                                    @csrf
                                     <div class="shadow sm:overflow-hidden sm:rounded-md">
                                         <div class="space-y-6 bg-white px-4 py-5 sm:p-6">
                                             <div>
                                                 <label for="title"
                                                        class="block text-sm font-medium text-gray-700">Title</label>
                                                 <div class="mt-1">
-                                                    <input id="title" name="title" rows="3"
+                                                    <input required id="title" name="title" type="text"
                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
                                                            placeholder="Titol del video">
                                                 </div>
@@ -29,9 +58,9 @@
                                                 <label for="description"
                                                        class="block text-sm font-medium text-gray-700">Description</label>
                                                 <div class="mt-1">
-                                            <textarea id="description" name="description" rows="3"
-                                                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                                      placeholder="Description"></textarea>
+                                                    <textarea required id="description" name="description" rows="3"
+                                                              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                              placeholder="Description"></textarea>
                                                 </div>
                                                 <p class="mt-2 text-sm text-gray-500">Brief description for your
                                                     profile. URLs
@@ -45,7 +74,7 @@
                                                     <div class="mt-1 flex rounded-md shadow-sm">
                                                 <span
                                                     class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500">http://</span>
-                                                        <input type="text" name="url" id="url"
+                                                        <input required type="url" name="url" id="url"
                                                                class="block w-full flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                                                placeholder="www.example.com">
                                                     </div>

@@ -19,6 +19,40 @@ class VideosManageControllerTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
+    public function user_with_permissions_can_store_videos()
+    {
+        $this->withoutExceptionHandling();
+        $this->loginAsVideoManager();
+
+        $video = objectify( [
+            'title' =>'HTTP for noobs',
+            'description' =>'bla bla bla',
+            'url' =>'http://tubeme.acacha.org/http',
+        ]);
+
+        // API ENDPOINT
+        $response = $this->post('/manage/videos',[
+            'title' =>'HTTP for noobs',
+            'description' =>'bla bla bla',
+            'url' =>'http://tubeme.acacha.org/http',
+        ]);
+
+        $response->assertRedirect(route('manage.videos'));
+
+        $videoDB = Video::first();
+
+//        $this->assertNotEquals(null,$video);
+        $this->assertNotNull($videoDB);
+        $this->assertEquals($video->title,$videoDB->title);
+        $this->assertEquals($video->description,$videoDB->description);
+        $this->assertEquals($video->url,$videoDB->url);
+        $this->assertNull($video->published_at);
+
+        $response->assertSessionHas('status', 'Successfully created');
+
+    }
+
+    /** @test */
     public function user_with_permissions_can_see_add_videos()
     {
         $this->loginAsVideoManager();
