@@ -7,6 +7,7 @@ use App\Models\Video;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 /**
@@ -16,6 +17,85 @@ class UsersManageControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    /** @test */
+    public function user_without_permissions_cannot_destroy_users(){
+        $this->loginAsRegularUser();
+
+        $user = User::create([
+            'name' =>'PROVA',
+            'email' =>'PROVA@PROVA.com',
+            'password' =>Hash::make('12345678'),
+        ]);
+        $response = $this->delete('/manage/users/' . $user->id);
+
+        $response->assertStatus(403);
+    }
+
+    /** @test */
+    public function user_with_permissions_can_destroy_users(){
+        $this->loginAsUsersManager();
+
+        $user = User::create([
+            'name' =>'PROVA',
+            'email' =>'PROVA@PROVA.com',
+            'password' =>Hash::make('12345678'),
+        ]);
+
+        $response = $this->delete('/manage/users/' . $user->id);
+
+        $response->assertRedirect(route('manage.users'));
+
+        $this->assertNull(User::find($user->id));
+
+        $this->assertNull($user->fresh());
+
+        $response->assertSessionHas('status', 'Successfully removed');
+    }
+
+    /** @test */
+    public function user_without_permissions_cannot_store_users()
+    {
+        $this->loginAsRegularUser();
+
+        $response = $this->post('/manage/users',[
+            'name' =>'PROVA',
+            'email' =>'PROVA@PROVA.com',
+            'password' =>Hash::make('12345678'),
+        ]);
+
+        $response->assertStatus(403);
+    }
+
+    /** @test */
+    public function user_with_permissions_can_store_users()
+    {
+        $this->loginAsUsersManager();
+
+        $user = objectify( [
+            'name' =>'PROVA',
+            'email' =>'PROVA@PROVA.com',
+            'password' =>Hash::make('12345678'),
+        ]);
+
+        // API ENDPOINT
+        $response = $this->post('/manage/users',[
+            'name' =>'PROVA',
+            'email' =>'PROVA@PROVA.com',
+            'password' =>Hash::make('12345678'),
+        ]);
+
+        $response->assertRedirect(route('manage.users'));
+
+        $userDB = User::where('email','PROVA@PROVA.com')->first();
+
+        $this->assertNotNull($userDB);
+        $this->assertEquals($user->name,$userDB->name);
+        $this->assertEquals($user->email,$userDB->email);
+//        $this->assertTrue(Hash::check('12345678',$userDB->password));
+
+        $response->assertSessionHas('status', 'Successfully created');
+
+    }
     /** @test */
     public function user_with_permissions_can_manage_users()
     {

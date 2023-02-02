@@ -19,6 +19,58 @@ class VideosManageControllerTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
+    public function user_with_permissions_cannot_destroy_videos(){
+        $this->loginAsRegularUser();
+
+        $video = Video::create([
+            'title' =>'HTTP for noobs',
+            'description' =>'bla bla bla',
+            'url' =>'http://tubeme.acacha.org/http',
+        ]);
+
+        $response = $this->delete('/manage/videos/' . $video->id);
+
+        $response->assertStatus(403);
+
+    }
+
+    /** @test */
+    public function user_without_permissions_can_destroy_videos(){
+        $this->loginAsVideoManager();
+
+        $video = Video::create([
+            'title' =>'HTTP for noobs',
+            'description' =>'bla bla bla',
+            'url' =>'http://tubeme.acacha.org/http',
+        ]);
+
+        $response = $this->delete('/manage/videos/' . $video->id);
+
+        $response->assertRedirect(route('manage.videos'));
+
+        $this->assertNull(Video::find($video->id));
+
+        $this->assertNull($video->fresh());
+
+        $response->assertSessionHas('status', 'Successfully removed');
+
+    }
+
+    /** @test */
+    public function user_without_permissions_cannot_store_videos()
+    {
+        $this->loginAsRegularUser();
+
+        $response = $this->post('/manage/videos',[
+            'title' =>'HTTP for noobs',
+            'description' =>'bla bla bla',
+            'url' =>'http://tubeme.acacha.org/http',
+        ]);
+
+        $response->assertStatus(403);
+    }
+
+    /** @test */
     public function user_with_permissions_can_store_videos()
     {
         $this->withoutExceptionHandling();
@@ -41,7 +93,6 @@ class VideosManageControllerTest extends TestCase
 
         $videoDB = Video::first();
 
-//        $this->assertNotEquals(null,$video);
         $this->assertNotNull($videoDB);
         $this->assertEquals($video->title,$videoDB->title);
         $this->assertEquals($video->description,$videoDB->description);
@@ -123,7 +174,6 @@ class VideosManageControllerTest extends TestCase
         $response = $this->get('/manage/videos');
         $response->assertRedirect(route('login'));
     }
-
 
     /** @test */
     public function superadmins_can_manage_videos()

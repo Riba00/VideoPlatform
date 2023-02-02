@@ -11,7 +11,7 @@
                         </svg>
                     </div>
                     <div class="ml-3">
-                        <p class="text-sm font-medium text-green-800">Successfully created</p>
+                        <p class="text-sm font-medium text-green-800">{{ session('status') }}</p>
                     </div>
                     <div class="ml-auto pl-3">
                         <div class="-mx-1.5 -my-1.5">
@@ -132,8 +132,14 @@
                                             class="sr-only"></span></a>
                                     <a href="#" class="text-green-600 hover:text-indigo-900">Edit<span
                                             class="sr-only"></span></a>
-                                    <a href="#" class="text-red-600 hover:text-indigo-900">Delete<span
-                                            class="sr-only"></span></a>
+                                    <form class="inline" method="POST" action="/manage/videos/{{ $video->id }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <a href="#" class="text-red-600 hover:text-indigo-900" onclick="event.preventDefault('form');
+                                        this.closest('form').submit()">Delete<span
+                                                class="sr-only"></span></a>
+                                    </form>
+
                                 </td>
                             </tr>
                         @endforeach
