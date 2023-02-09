@@ -16,12 +16,12 @@
                         {{ __('Dashboard') }}
                     </x-jet-nav-link>
                     @can('videos_manage_index')
-                        <x-jet-nav-link href="/manage/videos" :active="request()->routeIs('manage.videos')">
+                        <x-jet-nav-link href="/manage/videos" :active="request()->routeIs('manage.videos') || request()->routeIs('manage.videos.edit')">
                             {{ __('Videos') }}
                         </x-jet-nav-link>
                     @endcan
                     @can('users_manage_index')
-                        <x-jet-nav-link href="/manage/users" :active="request()->routeIs('manage.users')">
+                        <x-jet-nav-link href="/manage/users" :active="request()->routeIs('manage.users') || request()->routeIs('manage.users.edit')">
                             {{ __('Users') }}
                         </x-jet-nav-link>
                     @endcan

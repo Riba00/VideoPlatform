@@ -32,7 +32,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         ->name('manage.videos');
     Route::post('/manage/videos', [VideosManageController::class, 'store'])->middleware(['can:videos_manage_create']);
     Route::delete('/manage/videos/{id}', [VideosManageController::class, 'destroy'])->middleware(['can:videos_manage_destroy']);
-    Route::get('/manage/videos/{id}', [VideosManageController::class, 'edit'])->middleware(['can:videos_manage_edit']);
+    Route::get('/manage/videos/{id}', [VideosManageController::class, 'edit'])->middleware(['can:videos_manage_edit'])
+        ->name('manage.videos.edit');
     Route::put('/manage/videos/{id}', [VideosManageController::class, 'update'])->middleware(['can:videos_manage_update']);
 
 
@@ -40,6 +41,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         ->name('manage.users');
     Route::post('/manage/users', [UsersManageController::class, 'store'])->middleware(['can:users_manage_create']);
     Route::delete('/manage/users/{id}', [UsersManageController::class, 'destroy'])->middleware(['can:users_manage_destroy']);
+    Route::get('/manage/users/{id}', [UsersManageController::class, 'edit'])->middleware(['can:users_manage_edit'])
+        ->name('manage.users.edit');
+    Route::put('/manage/users/{id}', [UsersManageController::class, 'update'])->middleware(['can:users_manage_update']);
 });
 
 
