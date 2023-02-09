@@ -123,7 +123,7 @@
                                                 <a href="/videos/{{ $video->id }}" target="_blank"
                                                    class="text-indigo-600 hover:text-indigo-900">Show<span
                                                         class="sr-only"></span></a>
-                                                <a href="/manage/videos/{{ $video->id }}" target="_blank"
+                                                <a href="/manage/videos/{{ $video->id }}"
                                                    class="text-green-600 hover:text-indigo-900">Edit<span
                                                         class="sr-only"></span></a>
                                                 <form class="inline" method="POST"
