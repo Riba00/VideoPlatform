@@ -109,7 +109,11 @@
                                     </thead>
                                     <tbody class="divide-y divide-gray-200 bg-white">
                                     @foreach($videos as $video)
-                                        <tr>
+                                        @if($loop->odd)
+                                            <tr class="bg-white">
+                                        @else
+                                            <tr class="bg-gray-100">
+                                        @endif
                                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                                                 {{ $video->id }}</td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $video->title }}</td>
@@ -119,8 +123,8 @@
                                                 <a href="/videos/{{ $video->id }}" target="_blank"
                                                    class="text-indigo-600 hover:text-indigo-900">Show<span
                                                         class="sr-only"></span></a>
-                                                {{--                                        <a href="/users/{{ $user->id }}" target="_blank" class="text-indigo-600 hover:text-indigo-900">Show<span class="sr-only"></span></a>--}}
-                                                <a href="#" class="text-green-600 hover:text-indigo-900">Edit<span
+                                                <a href="/manage/videos/{{ $video->id }}" target="_blank"
+                                                   class="text-green-600 hover:text-indigo-900">Edit<span
                                                         class="sr-only"></span></a>
                                                 <form class="inline" method="POST"
                                                       action="/manage/videos/{{ $video->id }}">

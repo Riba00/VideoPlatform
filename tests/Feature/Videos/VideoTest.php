@@ -5,7 +5,6 @@ namespace Tests\Feature\Videos;
 use App\Models\Video;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 
@@ -43,6 +42,7 @@ class VideoTest extends TestCase
         $response->assertSee('Title here');
         $response->assertSee('Description here');
         $response->assertSee('13 de desembre de 2020');
+        $response->assertSee('https://youtu.be/w8j07_DBl_I');
     }
 
     /**
