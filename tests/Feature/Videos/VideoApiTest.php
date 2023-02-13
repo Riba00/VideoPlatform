@@ -4,6 +4,7 @@ namespace Tests\Feature\Videos;
 
 use App\Models\Video;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
@@ -13,6 +14,203 @@ use Tests\TestCase;
 class VideoApiTest extends TestCase
 {
     use RefreshDatabase;
+
+    /** @test */
+    public function regular_users_cannot_update_videos()
+    {
+        $this->loginAsRegularUser();
+        $video = Video::create([
+            'title' => 'TDD 101',
+            'description' => 'Bla bla bla',
+            'url' => 'https://www.youtube.com/watch?v=2NnTOzZBieM&list=PLyasg1A0hpk07HA0VCApd4AGd3Xm45LQv&index=26',
+        ]);
+
+        $response = $this->putJson('/api/videos/' . $video->id);
+
+        $response->assertStatus(403);
+
+        $newVideo = Video::find($video->id);
+
+        $this->assertEquals($newVideo->id, $video->id);
+        $this->assertEquals($newVideo->title, $video->title);
+        $this->assertEquals($newVideo->description, $video->description);
+        $this->assertEquals($newVideo->url, $video->url);
+    }
+
+    /** @test */
+    public function guest_users_cannot_update_videos()
+    {
+        $video = Video::create([
+            'title' => 'TDD 101',
+            'description' => 'Bla bla bla',
+            'url' => 'https://www.youtube.com/watch?v=2NnTOzZBieM&list=PLyasg1A0hpk07HA0VCApd4AGd3Xm45LQv&index=26',
+        ]);
+
+        $response = $this->putJson('/api/videos/' . $video->id);
+
+        $response->assertStatus(401);
+
+        $this->assertNotNull(Video::find($video->id));
+
+        $newVideo = Video::find($video->id);
+
+        $this->assertEquals($newVideo->id, $video->id);
+        $this->assertEquals($newVideo->title, $video->title);
+        $this->assertEquals($newVideo->description, $video->description);
+        $this->assertEquals($newVideo->url, $video->url);
+    }
+
+    /** @test */
+    public function returns_404_when_updating_and_unexisting_videos()
+    {
+        $this->loginAsVideoManager();
+        $response = $this->putJson('/api/videos/999');
+        $response->assertStatus(404);
+    }
+
+    /** @test */
+    public function user_with_permissions_can_update_videos()
+    {
+        $this->loginAsVideoManager();
+
+        $video = Video::create([
+            'title' => 'TDD 101',
+            'description' => 'Bla bla bla',
+            'url' => 'https://www.youtube.com/watch?v=2NnTOzZBieM&list=PLyasg1A0hpk07HA0VCApd4AGd3Xm45LQv&index=26',
+        ]);
+
+
+        $response = $this->deleteJson('/api/videos/' . $video->id);
+        $response->assertStatus(200)
+            ->assertJson(fn(AssertableJson $json) => $json->has('id')
+                ->where('title', $video['title'])
+                ->where('url', $video['url'])
+                ->etc()
+            );
+        $this->assertNull(Video::find($response['id']));
+    }
+
+    /** @test */
+    public function regular_users_cannot_destroy_videos()
+    {
+        $this->loginAsRegularUser();
+        $video = Video::create([
+            'title' => 'TDD 101',
+            'description' => 'Bla bla bla',
+            'url' => 'https://www.youtube.com/watch?v=2NnTOzZBieM&list=PLyasg1A0hpk07HA0VCApd4AGd3Xm45LQv&index=26',
+        ]);
+
+        $response = $this->deleteJson('/api/videos/' . $video->id);
+
+        $response->assertStatus(403);
+
+        $this->assertNotNull(Video::find($video->id));
+    }
+
+    /** @test */
+    public function guest_users_cannot_destroy_videos()
+    {
+        $video = Video::create([
+            'title' => 'TDD 101',
+            'description' => 'Bla bla bla',
+            'url' => 'https://www.youtube.com/watch?v=2NnTOzZBieM&list=PLyasg1A0hpk07HA0VCApd4AGd3Xm45LQv&index=26',
+        ]);
+
+        $response = $this->deleteJson('/api/videos/' . $video->id);
+
+        $response->assertStatus(401);
+
+        $this->assertNotNull(Video::find($video->id));
+    }
+
+    /** @test */
+    public function returns_404_when_deleting_and_unexisting_videos()
+    {
+        $this->loginAsVideoManager();
+        $response = $this->deleteJson('/api/videos/999');
+        $response->assertStatus(404);
+    }
+
+    /** @test */
+    public function user_with_permissions_can_destroy_videos()
+    {
+        $this->loginAsVideoManager();
+
+        $video = Video::create([
+            'title' => 'TDD 101',
+            'description' => 'Bla bla bla',
+            'url' => 'https://www.youtube.com/watch?v=2NnTOzZBieM&list=PLyasg1A0hpk07HA0VCApd4AGd3Xm45LQv&index=26',
+        ]);
+
+
+        $response = $this->deleteJson('/api/videos/' . $video->id);
+        $response->assertStatus(200)
+            ->assertJson(fn(AssertableJson $json) => $json->has('id')
+                ->where('title', $video['title'])
+                ->where('url', $video['url'])
+                ->etc()
+            );
+        $this->assertNull(Video::find($response['id']));
+    }
+
+    /** @test */
+    public function regular_users_cannot_store_videos()
+    {
+        $this->loginAsRegularUser();
+
+        $response = $this->postJson('/api/videos', $video = [
+            'title' => 'TDD 101',
+            'description' => 'Bla bla bla',
+            'url' => 'https://www.youtube.com/watch?v=2NnTOzZBieM&list=PLyasg1A0hpk07HA0VCApd4AGd3Xm45LQv&index=26',
+        ]);
+
+        $response->assertStatus(403);
+
+        $this->assertCount(0, Video::all());
+
+
+    }
+
+    /** @test */
+    public function guest_users_cannot_store_videos()
+    {
+
+        $response = $this->postJson('/api/videos', $video = [
+            'title' => 'TDD 101',
+            'description' => 'Bla bla bla',
+            'url' => 'https://www.youtube.com/watch?v=2NnTOzZBieM&list=PLyasg1A0hpk07HA0VCApd4AGd3Xm45LQv&index=26',
+        ]);
+
+        $response->assertStatus(401);
+
+        $this->assertCount(0, Video::all());
+
+
+    }
+
+    /** @test */
+    public function user_with_permissions_can_store_videos()
+    {
+        $this->loginAsVideoManager();
+
+        $response = $this->postJson('/api/videos', $video = [
+            'title' => 'TDD 101',
+            'description' => 'Bla bla bla',
+            'url' => 'https://www.youtube.com/watch?v=2NnTOzZBieM&list=PLyasg1A0hpk07HA0VCApd4AGd3Xm45LQv&index=26',
+        ]);
+
+        $response->assertStatus(201)
+            ->assertJson(fn(AssertableJson $json) => $json->has('id')
+                ->where('title', $video['title'])
+                ->where('url', $video['url'])
+                ->etc()
+            );
+        $newVideo = Video::find($response['id']);
+        $this->assertEquals($response['id'], $newVideo->id);
+        $this->assertEquals($response['title'], $newVideo->title);
+        $this->assertEquals($response['description'], $newVideo->description);
+        $this->assertEquals($response['url'], $newVideo->url);
+    }
 
     /** @test */
     public function guest_users_can_index_published_videos()
@@ -30,7 +228,6 @@ class VideoApiTest extends TestCase
     /** @test */
     public function guest_users_can_show_published_videos()
     {
-//        $this->withoutExceptionHandling();
         $video = Video::create([
             'title' => 'TDD 101',
             'description' => 'Bla bla bla',
@@ -44,11 +241,10 @@ class VideoApiTest extends TestCase
         $response->assertSee($video->description);
         $response->assertSee($video->id);
 
-        $response->assertJson(fn(AssertableJson $json) =>
-                    $json->where('id', $video->id)
-                        ->where('title', $video->title)
-                        ->where('url', $video->url)
-                        ->etc());
+        $response->assertJson(fn(AssertableJson $json) => $json->where('id', $video->id)
+            ->where('title', $video->title)
+            ->where('url', $video->url)
+            ->etc());
     }
 
     /** @test */
@@ -57,5 +253,15 @@ class VideoApiTest extends TestCase
         $response = $this->get('/api/videos/9984');
 
         $response->assertStatus(404);
+    }
+
+    private function loginAsVideoManager()
+    {
+        Auth::login(create_video_manager_user());
+    }
+
+    private function loginAsRegularUser()
+    {
+        Auth::login(create_regular_user());
     }
 }
