@@ -46,6 +46,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::put('/manage/users/{id}', [UsersManageController::class, 'update'])->middleware(['can:users_manage_update']);
 });
 
+Route::get('/casteaching_package',function(){
+    return view('casteaching_package');
+});
+
 
 
 
