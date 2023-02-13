@@ -73,21 +73,33 @@ class VideoApiTest extends TestCase
     {
         $this->loginAsVideoManager();
 
-        $video = Video::create([
+        $video  = Video::create([
             'title' => 'TDD 101',
             'description' => 'Bla bla bla',
-            'url' => 'https://www.youtube.com/watch?v=2NnTOzZBieM&list=PLyasg1A0hpk07HA0VCApd4AGd3Xm45LQv&index=26',
+            'url' => 'https://youtu.be/ednlsVl-NHA'
         ]);
 
+        $response = $this->putJson('/api/videos/' . $video->id, $newVideo = [
+            'title' => 'TDD 101 new',
+            'description' => 'Bla bla bla new',
+            'url' => 'https://youtu.be/ednlsVl-NHA/new'
+        ]);
 
-        $response = $this->deleteJson('/api/videos/' . $video->id);
-        $response->assertStatus(200)
-            ->assertJson(fn(AssertableJson $json) => $json->has('id')
-                ->where('title', $video['title'])
-                ->where('url', $video['url'])
+        $response
+            ->assertStatus(200)
+            ->assertJson(fn (AssertableJson $json) =>
+            $json->has('id')
+                ->where('title', $newVideo['title'])
+                ->where('description', $newVideo['description'])
+                ->where('url', $newVideo['url'])
                 ->etc()
             );
-        $this->assertNull(Video::find($response['id']));
+
+        $this->assertNotNull($dbVideo = Video::find($response['id']));
+        $this->assertEquals($video->id,$dbVideo->id);
+        $this->assertEquals($newVideo['title'],$dbVideo->title);
+        $this->assertEquals($newVideo['description'],$dbVideo->description);
+        $this->assertEquals($newVideo['url'],$dbVideo->url);
     }
 
     /** @test */

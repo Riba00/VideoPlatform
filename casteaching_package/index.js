@@ -5,4 +5,3 @@ export default {
         return response.data
     }
 }
-D5oIbky96g7sslYU6gRNw0ui6qV2TyqnVdQ-pw
