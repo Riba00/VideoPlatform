@@ -20,6 +20,11 @@
                             {{ __('Videos') }}
                         </x-jet-nav-link>
                     @endcan
+                    @can('videos_manage_index')
+                        <x-jet-nav-link href="/vue/manage/videos" :active="request()->routeIs('manage.vue.videos') || request()->routeIs('manage.videos.edit')">
+                            {{ __('Videos Vue') }}
+                        </x-jet-nav-link>
+                    @endcan
                     @can('users_manage_index')
                         <x-jet-nav-link href="/manage/users" :active="request()->routeIs('manage.users') || request()->routeIs('manage.users.edit')">
                             {{ __('Users') }}
@@ -181,6 +186,11 @@
             @can('videos_manage_index')
                 <x-jet-responsive-nav-link href="/manage/videos" :active="request()->routeIs('manage.videos')">
                     {{ __('Videos') }}
+                </x-jet-responsive-nav-link>
+            @endcan
+            @can('videos_manage_index')
+                <x-jet-responsive-nav-link href="/vue/manage/videos" :active="request()->routeIs('manage.vue.videos')">
+                    {{ __('Videos Vue') }}
                 </x-jet-responsive-nav-link>
             @endcan
             @can('users_manage_index')

@@ -8,10 +8,6 @@ use Tests\Feature\Videos\VideosManageControllerTest;
 
 class VideosManageController extends Controller
 {
-    public static function testedBy()
-    {
-        return VideosManageControllerTest::class;
-    }
     public function index()
     {
         return view('videos.manage.index',[
