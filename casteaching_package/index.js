@@ -1,11 +1,14 @@
 import axios from 'axios'
 
+//TOKEN soOqxnvCWQitKJc35I0VWHbG7sdOJoksWi1vgEzP
+
 const apiClient = axios.create({
     baseURL: 'http://casteachingriba.test/api',
     withCredentials: false,
     headers:{
         Accept: 'application/json',
-        "Content-Type": 'application/json'
+        "Content-Type": 'application/json',
+        Authorization: 'Bearer soOqxnvCWQitKJc35I0VWHbG7sdOJoksWi1vgEzP'
     }
 
 })

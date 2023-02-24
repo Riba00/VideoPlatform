@@ -5,7 +5,10 @@
                 <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                     <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
                         <div class="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
-                            <h3 class="text-lg font-medium leading-6 text-gray-900">VIDEOS</h3>
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">
+                                VIDEOS
+                                <button @click="refresh">REFRESH</button>
+                            </h3>
                         </div>
                         <table class="min-w-full divide-y divide-gray-300">
                             <thead class="bg-gray-50">
@@ -100,7 +103,15 @@ export default {
         }
     },
     async created() {
-        this.videos = await window.casteaching.videos()
+        this.getVideos()
+    },
+    methods: {
+        async getVideos() {
+            this.videos = await window.casteaching.videos()
+        },
+        async refresh(){
+            this.getVideos()
+        }
     }
 }
 </script>
