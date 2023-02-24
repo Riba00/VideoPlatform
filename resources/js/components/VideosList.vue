@@ -44,7 +44,9 @@
                                     {{ video.url }}
                                 </td>
                                 <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                    TODO ACTIONS
+                                    <video-show-link :video="video"></video-show-link>
+                                    <video-edit-link :video="video"></video-edit-link>
+                                    <video-destroy-link :video="video"></video-destroy-link>
                                 </td>
                             </tr>
                             </tbody>
@@ -57,8 +59,17 @@
 </template>
 
 <script>
+import VideoShowLink from "./VideoShowLink.vue";
+import VideoEditLink from "./VideoEditLink.vue";
+import VideoDestroyLink from "./VideoDestroyLink.vue";
+
 export default {
     name: "VideosList",
+    components: {
+        'video-show-link' : VideoShowLink,
+        'video-edit-link' : VideoEditLink,
+        'video-destroy-link' : VideoDestroyLink
+    },
     data() {
         return {
             videos: []
