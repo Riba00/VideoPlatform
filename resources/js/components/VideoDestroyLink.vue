@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import bus from "../bus";
+
 export default {
     name: "VideoDestroyLink",
     props: {
@@ -15,7 +17,13 @@ export default {
     },
     methods:{
         async remove() {
-            await window.casteaching.video.destroy(this.video.id)
+            try {
+                await window.casteaching.video.destroy(this.video.id)
+                this.$emit('removed')
+                bus.$emit('status','Video removed successfully')
+            }catch (error){
+                console.log(error)
+            }
         }
     }
 }

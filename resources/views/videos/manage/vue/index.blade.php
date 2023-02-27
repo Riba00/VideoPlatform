@@ -7,7 +7,7 @@
     <div class="flex flex-col mt-10" id="vueapp">
         <div class="mx-auto sm:px-6 lg:px-8 w-full max-w-7xl">
             <div class="px-4 sm:px-6 lg:px-8">
-                <x-status></x-status>
+                <status></status>
                 @can('videos_manage_create')
                     <video-form></video-form>
                 @endcan

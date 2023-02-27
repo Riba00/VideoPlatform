@@ -49,7 +49,7 @@
                                 <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                                     <video-show-link :video="video"></video-show-link>
                                     <video-edit-link :video="video"></video-edit-link>
-                                    <video-destroy-link :video="video"></video-destroy-link>
+                                    <video-destroy-link :video="video" @removed="refresh()"></video-destroy-link>
                                 </td>
                             </tr>
                             </tbody>
@@ -65,6 +65,7 @@
 import VideoShowLink from "./VideoShowLink.vue";
 import VideoEditLink from "./VideoEditLink.vue";
 import VideoDestroyLink from "./VideoDestroyLink.vue";
+import bus from "../bus";
 
 export default {
     name: "VideosList",
@@ -104,13 +105,19 @@ export default {
     },
     async created() {
         this.getVideos()
+        bus.$on('created',async () =>{
+            await this.refresh()
+        });
+        bus.$on('updated',async () =>{
+            await this.refresh()
+        });
     },
     methods: {
         async getVideos() {
             this.videos = await window.casteaching.videos()
         },
         async refresh(){
-            this.getVideos()
+            await this.getVideos()
         }
     }
 }

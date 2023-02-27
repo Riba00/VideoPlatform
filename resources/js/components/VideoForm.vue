@@ -10,7 +10,7 @@
                         </div>
                     </div>
                     <div class="mt-5 md:col-span-2 md:mt-0">
-                        <form data-qa="form_video_create" @submit.prevent="store" method="POST">
+                        <form data-qa="form_video_create" @submit.prevent="save" method="POST">
                             <div class="shadow sm:overflow-hidden sm:rounded-md">
                                 <div class="space-y-6 bg-white px-4 py-5 sm:p-6">
                                     <div>
@@ -54,7 +54,8 @@
                                 <div class="bg-gray-50 px-4 py-3 text-right sm:px-6">
                                     <button type="submit"
                                             class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                                        Crear
+                                        <span v-if="status==='creating'">Crear</span>
+                                        <span v-if="status==='editing'">Editar</span>
                                     </button>
                                 </div>
                             </div>
@@ -69,21 +70,57 @@
 </template>
 
 <script>
+import bus from "../bus";
+
 export default {
     name: "VideoForm",
     data(){
         return{
-            video: {}
+            video: {},
+            status: 'creating'
         }
     },
     methods: {
-        store(){
-            window.casteaching.video.create({
-                title: this.video.title,
-                description: this.video.description,
-                url: this.video.url
-            })
+        save(){
+            if (this.status ==='creating'){
+                this.store()
+            }
+            if (this.status ==='editing'){
+                this.update()
+            }
+        },
+        async store(){
+            try {
+                 await window.casteaching.video.create({
+                    title: this.video.title,
+                    description: this.video.description,
+                    url: this.video.url
+                })
+                bus.$emit('created')
+                bus.$emit('status','Video created successfully')
+            }catch (error){
+                console.log(error)
+            }
+        },
+        update(){
+            try {
+                window.casteaching.video.update(this.video.id,{
+                    title: this.video.title,
+                    description: this.video.description,
+                    url: this.video.url
+                })
+                bus.$emit('updated')
+                bus.$emit('status','Video updated successfully')
+            }catch (error){
+                console.log(error)
+            }
         }
+    },
+    created() {
+        bus.$on('edit',(video)=>{
+            this.video = video
+            this.status = 'editing'
+        })
     }
 }
 </script>
