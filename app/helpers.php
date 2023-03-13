@@ -29,7 +29,7 @@ if (!function_exists('create_default_videos')) {
         Video::create([
             'title' => 'Title here',
             'description' => 'Description here',
-            'url' => 'https://youtu.be/w8j07_DBl_I',
+            'url' => 'https://www.youtube.com/embed/a4ez0CcEHV4',
             'published_at' => Carbon::parse('December 13, 2020 8:00pm'),
             'previous' => null,
             'next' => null,
@@ -160,23 +160,35 @@ if (!function_exists('create_permissions')) {
     }
 }
 
+if (!function_exists('create_sample_video')) {
+    function create_sample_video()
+    {
+        return Video::create([
+            'title' => 'Video 1',
+            'description' => 'Descripcio video 1',
+            'url' => 'https://www.youtube.com/embed/a4ez0CcEHV4'
+        ]);
+
+    }
+}
+
 if (!function_exists('create_sample_videos')) {
     function create_sample_videos()
     {
         $video1 = Video::create([
             'title' => 'Video 1',
             'description' => 'Descripcio video 1',
-            'url' => 'https://www.youtube.com/watch?v=zyABmm6Dw64&list=PLyasg1A0hpk07HA0VCApd4AGd3Xm45LQv&index=5'
+            'url' => 'https://www.youtube.com/embed/a4ez0CcEHV4'
         ]);
         $video2 = Video::create([
             'title' => 'Video 2',
             'description' => 'Descripcio video 2',
-            'url' => 'https://www.youtube.com/watch?v=q06GbMP1h_s&list=PLyasg1A0hpk07HA0VCApd4AGd3Xm45LQv&index=2'
+            'url' => 'https://www.youtube.com/embed/a4ez0CcEHV4'
         ]);
         $video3 = Video::create([
             'title' => 'Video 3',
             'description' => 'Descripcio video 3',
-            'url' => 'https://www.youtube.com/watch?v=ofSbYUEml4c&list=PLyasg1A0hpk07HA0VCApd4AGd3Xm45LQv&index=9&t=1520s'
+            'url' => 'https://www.youtube.com/embed/a4ez0CcEHV4'
         ]);
         return collect([$video1,$video2,$video3]);
     }
