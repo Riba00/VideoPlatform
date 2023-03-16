@@ -2,13 +2,16 @@
 
 namespace Tests\Feature\Videos;
 
+use App\Events\VideoCreated;
 use App\Models\User;
 use App\Models\Video;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
+use Tests\Feature\Traits\CanLogin;
 use Tests\TestCase;
 
 /**
@@ -16,7 +19,7 @@ use Tests\TestCase;
  */
 class VideosManageControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, CanLogin;
 
     /** @test */
     public function user_with_permissions_can_update_videos()
@@ -134,7 +137,7 @@ class VideosManageControllerTest extends TestCase
         $this->withoutExceptionHandling();
         $this->loginAsVideoManager();
 
-        $video = objectify([
+        $video = objectify($videoArray = [
             'title' => 'HTTP for noobs',
             'description' => 'bla bla bla',
             'url' => 'http://tubeme.acacha.org/http',
@@ -146,6 +149,10 @@ class VideosManageControllerTest extends TestCase
             'description' => 'bla bla bla',
             'url' => 'http://tubeme.acacha.org/http',
         ]);
+
+        Event::fake();
+        $response = $this->post('/manage/videos',$videoArray);
+        Event::assertDispatched(VideoCreated::class);
 
         $response->assertRedirect(route('manage.videos'));
 
@@ -244,21 +251,5 @@ class VideosManageControllerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertViewIs('videos.manage.index');
-    }
-
-    private function loginAsVideoManager()
-    {
-        Auth::login(create_video_manager_user());
-    }
-
-
-    private function loginAsSuperAdmin()
-    {
-        Auth::login(create_superadmin_user());
-    }
-
-    private function loginAsRegularUser()
-    {
-        Auth::login(create_regular_user());
     }
 }
