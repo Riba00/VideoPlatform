@@ -1,6 +1,6 @@
 import Alpine from 'alpinejs';
-import casteaching from 'casteaching';
 import Vue from 'vue/dist/vue.js';
+import casteaching from "@acacha/casteaching";
 
 import './bootstrap';
 import VideosList from "./components/VideosList.vue";
@@ -8,7 +8,9 @@ import VideoForm from "./components/VideoForm.vue";
 import Status from "./components/Status.vue";
 
 window.Alpine = Alpine;
-window.casteaching = casteaching;
+
+const api = casteaching({baseUrl: 'http://casteaching.test/api/'});
+window.casteaching = api;
 Alpine.start();
 
 window.Vue = Vue;
