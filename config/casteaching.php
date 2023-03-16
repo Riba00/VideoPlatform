@@ -7,6 +7,8 @@ return [
         'password' => env('DEFAULT_USER_PASSWORD','12345678'),
     ],
     'admins' => [
-        'sergiturbadenas@gmail.com'
+        'sergiturbadenas@gmail.com',
+        'superadmin@casteaching.com',
+        'jordiriba@iesebre.com'
     ]
 ];
