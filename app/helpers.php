@@ -57,7 +57,7 @@ if (!function_exists('create_superadmin_user')) {
     {
         $user = User::create([
             'name' => 'SuperAdmin',
-            'email' => 'superadmin@casteaching.com',
+            'email' => 'jordi.riba.ferre@gmail.com',
             'password' => Hash::make('12345678')
         ]);
         $user->superadmin = true;
