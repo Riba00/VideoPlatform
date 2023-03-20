@@ -8,8 +8,6 @@ return [
     ],
     'admins' => [
         'sergiturbadenas@gmail.com',
-        'superadmin@casteaching.com',
-        'jordiriba@iesebre.com',
         'jordi.riba.ferre@gmail.com'
     ]
 ];
