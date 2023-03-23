@@ -9,7 +9,7 @@ import Status from "./components/Status.vue";
 
 window.Alpine = Alpine;
 
-const api = casteaching({baseUrl: process.env.APP_URL});
+const api = casteaching({baseUrl: process.env.API_URL});
 api.setToken('sszyRVEZqpROZjFyG6MZ5EVqnJDGDcLOc11uC8n4')
 window.casteaching = api;
 Alpine.start();
