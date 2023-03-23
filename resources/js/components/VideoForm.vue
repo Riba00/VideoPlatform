@@ -102,9 +102,9 @@ export default {
                 console.log(error)
             }
         },
-        update(){
+        async update(){
             try {
-                window.casteaching.video.update(this.video.id,{
+                await window.casteaching.video.update(this.video.id,{
                     title: this.video.title,
                     description: this.video.description,
                     url: this.video.url

@@ -9,7 +9,8 @@ import Status from "./components/Status.vue";
 
 window.Alpine = Alpine;
 
-const api = casteaching({baseUrl: 'http://casteaching.test/api/'});
+const api = casteaching({baseUrl: 'http://casteachingriba.test/api/'});
+api.setToken('sszyRVEZqpROZjFyG6MZ5EVqnJDGDcLOc11uC8n4')
 window.casteaching = api;
 Alpine.start();
 
