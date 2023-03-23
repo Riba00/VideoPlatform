@@ -7,9 +7,10 @@ import VideosList from "./components/VideosList.vue";
 import VideoForm from "./components/VideoForm.vue";
 import Status from "./components/Status.vue";
 
+
 window.Alpine = Alpine;
 
-const api = casteaching({baseUrl: process.env.VITE_API_URL});
+const api = casteaching({baseUrl: import.meta.env.VITE_API_URL});
 api.setToken('sszyRVEZqpROZjFyG6MZ5EVqnJDGDcLOc11uC8n4')
 window.casteaching = api;
 Alpine.start();
