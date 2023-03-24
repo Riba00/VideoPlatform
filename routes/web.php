@@ -4,7 +4,6 @@ use App\Http\Controllers\UsersManageController;
 use App\Http\Controllers\VideosController;
 use App\Http\Controllers\VideosManageController;
 use App\Http\Controllers\VideosManageVueController;
-use App\Models\Video;
 use Illuminate\Support\Facades\Route;
 
 /*
