@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 /**
@@ -65,7 +66,7 @@ class SanctumTokenControllerTest extends TestCase
         $user = User::create([
             'name' => 'Prova',
             'email' => 'prova@prova.com',
-            'password' => '12345678',
+            'password' => Hash::make('12345678'),
         ]);
 
         $this->assertCount(0, $user->tokens);
@@ -73,7 +74,7 @@ class SanctumTokenControllerTest extends TestCase
 
         $response = $this->postJson('/api/sanctum/token', [
             'email' => $user->email,
-            'password' => $user->password,
+            'password' => '12345678',
             'device_name' => $user->name . "'s device",
         ]);
 

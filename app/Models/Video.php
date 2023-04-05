@@ -26,5 +26,10 @@ class Video extends Model
         return optional($this->published_at)->diffForHumans(Carbon::now());
     }
 
+    public function getPublishedAtTimestampAttribute()
+    {
+        return optional($this->published_at)->timestamp;
+    }
+
 
 }

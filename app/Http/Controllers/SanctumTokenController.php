@@ -27,7 +27,6 @@ class SanctumTokenController extends Controller
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.']
             ]);
-
         }
 
         return $user->createToken($request->device_name)->plainTextToken;
