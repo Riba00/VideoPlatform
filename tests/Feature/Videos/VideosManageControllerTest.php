@@ -3,8 +3,10 @@
 namespace Tests\Feature\Videos;
 
 use App\Events\VideoCreated;
+use App\Models\Serie;
 use App\Models\User;
 use App\Models\Video;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -33,20 +35,20 @@ class VideosManageControllerTest extends TestCase
             'url' => 'http://tubeme.acacha.org/http',
         ]);
 
-        $response = $this->put('/manage/videos/' . $video->id,[
+        $response = $this->put('/manage/videos/' . $video->id, [
             'title' => 'HTTP for AAAAAAA',
             'description' => 'bla bla AAAAAA',
             'url' => 'http://tubeme.acacha.org/AAAAAAA',
         ]);
 
         $response->assertRedirect(route('manage.videos'));
-        $response->assertSessionHas('status','Successfully updated');
+        $response->assertSessionHas('status', 'Successfully updated');
 
         $newVideo = Video::find($video->id);
-        $this->assertEquals('HTTP for AAAAAAA',$newVideo->title);
-        $this->assertEquals('bla bla AAAAAA',$newVideo->description);
-        $this->assertEquals('http://tubeme.acacha.org/AAAAAAA',$newVideo->url);
-        $this->assertEquals($video->id,$newVideo->id);
+        $this->assertEquals('HTTP for AAAAAAA', $newVideo->title);
+        $this->assertEquals('bla bla AAAAAA', $newVideo->description);
+        $this->assertEquals('http://tubeme.acacha.org/AAAAAAA', $newVideo->url);
+        $this->assertEquals($video->id, $newVideo->id);
 
     }
 
@@ -66,7 +68,7 @@ class VideosManageControllerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertViewIs('videos.manage.edit');
-        $response->assertViewHas('video', function ($v) use ($video){
+        $response->assertViewHas('video', function ($v) use ($video) {
             return $video->is($v);
         });
         $response->assertSee('<form data-qa="form_video_edit" a', false);
@@ -76,6 +78,21 @@ class VideosManageControllerTest extends TestCase
         $response->assertSee($video->url);
     }
 
+    /** @test */
+    public function title_is_required()
+    {
+        $this->markTestIncomplete();
+    }
+    /** @test */
+    public function description_is_required()
+    {
+        $this->markTestIncomplete();
+    }
+    /** @test */
+    public function url_is_required()
+    {
+        $this->markTestIncomplete();
+    }
 
     /** @test */
     public function user_with_permissions_cannot_destroy_videos()
@@ -151,7 +168,7 @@ class VideosManageControllerTest extends TestCase
         ]);
 
         Event::fake();
-        $response = $this->post('/manage/videos',$videoArray);
+        $response = $this->post('/manage/videos', $videoArray);
         Event::assertDispatched(VideoCreated::class);
 
         $response->assertRedirect(route('manage.videos'));
@@ -162,6 +179,46 @@ class VideosManageControllerTest extends TestCase
         $this->assertEquals($video->title, $videoDB->title);
         $this->assertEquals($video->description, $videoDB->description);
         $this->assertEquals($video->url, $videoDB->url);
+        $this->assertNull($video->published_at);
+
+        $response->assertSessionHas('status', 'Successfully created');
+
+    }
+
+    /** @test */
+    public function user_with_permissions_can_store_videos_with_serie()
+    {
+        $this->loginAsVideoManager();
+
+        $serie = Serie::create([
+            'title' => 'TDD (Test Driven Development)',
+            'description' => 'Bla bla bla',
+            'image' => 'tdd.png',
+            'teacher_name' => 'Sergi Tur Badenas',
+            'teacher_photo_url' => 'https://www.gravatar.com/avatar/' . md5('sergiturbadenas@gmail.com')
+        ]);
+
+        $video = objectify($videoArray = [
+            'title' => 'HTTP for noobs',
+            'description' => 'bla bla bla',
+            'url' => 'https://tubeme.acacha.org/http',
+            'serie_id' => $serie->id
+        ]);
+
+        // API ENDPOINT
+        Event::fake();
+        $response = $this->post('/manage/videos', $videoArray);
+        Event::assertDispatched(VideoCreated::class);
+
+        $response->assertRedirect(route('manage.videos'));
+
+        $videoDB = Video::first();
+
+        $this->assertNotNull($videoDB);
+        $this->assertEquals($video->title, $videoDB->title);
+        $this->assertEquals($video->description, $videoDB->description);
+        $this->assertEquals($video->url, $videoDB->url);
+        $this->assertEquals($videoDB->serie_id, $serie->id);
         $this->assertNull($video->published_at);
 
         $response->assertSessionHas('status', 'Successfully created');
@@ -222,6 +279,40 @@ class VideosManageControllerTest extends TestCase
         foreach ($videos as $video) {
             $response->assertSee($video->id);
             $response->assertSee($video->title);
+        }
+    }
+
+    /** @test */
+    public function user_with_permissions_can_manage_videos_and_see_series()
+    {
+        $this->loginAsVideoManager();
+
+        $videos = create_sample_videos();
+
+        $serie = Serie::create([
+            'title' => 'TDD (Test Driven Development)',
+            'description' => 'Bla bla bla',
+            'image' => 'tdd.png',
+            'teacher_name' => 'Sergi Tur Badenas',
+            'teacher_photo_url' => 'https://www.gravatar.com/avatar/' . md5('sergiturbadenas@gmail.com'),
+            'created_at' => Carbon::now()->addSeconds(1)
+        ]);
+
+        $videos[0]->setSerie($serie);
+
+        $response = $this->get('/manage/videos');
+
+        $response->assertStatus(200);
+        $response->assertViewIs('videos.manage.index');
+        $response->assertViewHas('videos', function ($v) use ($videos) {
+            return $videos->count() === $videos->count() && get_class($videos) === Collection::class &&
+                get_class($videos[0]) === Video::class;
+        });
+
+        foreach ($videos as $video) {
+            $response->assertSee($video->id);
+            $response->assertSee($video->title);
+            $response->assertSee($videos[0]->fresh()->serie->title);
         }
     }
 

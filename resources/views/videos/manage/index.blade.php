@@ -53,12 +53,23 @@
                                                             <label for="url"
                                                                    class="block text-sm font-medium text-gray-700">URL</label>
                                                             <div class="mt-1 flex rounded-md shadow-sm">
-                                                <span
-                                                    class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500">http://</span>
+                                                                <span
+                                                                    class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500">http://</span>
                                                                 <input required type="url" name="url" id="url"
                                                                        class="block w-full flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                                                        placeholder="www.example.com">
                                                             </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="grid grid-cols-3 gap-6">
+                                                        <div class="col-span-3 sm:col-span-2">
+                                                            <label for="url"
+                                                                   class="block text-sm font-medium text-gray-700">Serie</label>
+                                                            <select id="serie" name="serie_id" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                                                @foreach(\App\Models\Serie::all() as $serie)
+                                                                    <option value="{{ $serie->id }}">{{ $serie->title }}</option>
+                                                                @endforeach
+                                                            </select>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -102,6 +113,9 @@
                                         <th scope="col"
                                             class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">URL
                                         </th>
+                                        <th scope="col"
+                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">SERIE
+                                        </th>
                                         <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                                             <span class="sr-only">Actions</span>
                                         </th>
@@ -113,31 +127,32 @@
                                             <tr class="bg-white">
                                         @else
                                             <tr class="bg-gray-100">
-                                        @endif
-                                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                                                {{ $video->id }}</td>
-                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $video->title }}</td>
-                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $video->description }}</td>
-                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $video->url }}</td>
-                                            <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                                <a href="/videos/{{ $video->id }}"
-                                                   class="text-indigo-600 hover:text-indigo-900">Show<span
-                                                        class="sr-only"></span></a>
-                                                <a href="/manage/videos/{{ $video->id }}"
-                                                   class="text-green-600 hover:text-indigo-900">Edit<span
-                                                        class="sr-only"></span></a>
-                                                <form class="inline" method="POST"
-                                                      action="/manage/videos/{{ $video->id }}">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <a href="#" class="text-red-600 hover:text-indigo-900"
-                                                       onclick="event.preventDefault('form'); this.closest('form').submit()">Delete<span
+                                                @endif
+                                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                                                    {{ $video->id }}</td>
+                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $video->title }}</td>
+                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $video->description }}</td>
+                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $video->url }}</td>
+                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ optional($video->serie)->title }}</td>
+                                                <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                                                    <a href="/videos/{{ $video->id }}"
+                                                       class="text-indigo-600 hover:text-indigo-900">Show<span
                                                             class="sr-only"></span></a>
-                                                </form>
+                                                    <a href="/manage/videos/{{ $video->id }}"
+                                                       class="text-green-600 hover:text-indigo-900">Edit<span
+                                                            class="sr-only"></span></a>
+                                                    <form class="inline" method="POST"
+                                                          action="/manage/videos/{{ $video->id }}">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <a href="#" class="text-red-600 hover:text-indigo-900"
+                                                           onclick="event.preventDefault('form'); this.closest('form').submit()">Delete<span
+                                                                class="sr-only"></span></a>
+                                                    </form>
 
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                                </td>
+                                            </tr>
+                                            @endforeach
                                     </tbody>
                                 </table>
                             </div>
