@@ -54,6 +54,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 });
 
+Route::get('/auth/redirect', [\App\Http\Controllers\GithubAuthController::class, 'redirect']);
+
+Route::get('/auth/callback', [\App\Http\Controllers\GithubAuthController::class, 'callback']);
+
+
 
 
 
