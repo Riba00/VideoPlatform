@@ -112,5 +112,21 @@ class GithubAuthControllerTest extends TestCase
 
     }
 
+    /** @test */
+    public function show_error_when_call_to_github_fails()
+    {
+        $e = new \Exception('Error!');
+
+        Socialite::shouldReceive('driver')
+            ->once()
+            ->with('github')
+            ->andThrow($e);
+
+        $response = $this->get('/auth/callback');
+
+        $response->assertRedirect('login');
+        $response->assertSessionHasErrors(['msg' => 'An Error occurred!!!Error!']);
+    }
+
 
 }

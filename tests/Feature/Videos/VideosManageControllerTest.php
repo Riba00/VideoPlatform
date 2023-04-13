@@ -151,7 +151,6 @@ class VideosManageControllerTest extends TestCase
     /** @test */
     public function user_with_permissions_can_store_videos()
     {
-        $this->withoutExceptionHandling();
         $this->loginAsVideoManager();
 
         $video = objectify($videoArray = [
@@ -160,14 +159,9 @@ class VideosManageControllerTest extends TestCase
             'url' => 'http://tubeme.acacha.org/http',
         ]);
 
-        // API ENDPOINT
-        $response = $this->post('/manage/videos', [
-            'title' => 'HTTP for noobs',
-            'description' => 'bla bla bla',
-            'url' => 'http://tubeme.acacha.org/http',
-        ]);
-
         Event::fake();
+
+        // API ENDPOINT
         $response = $this->post('/manage/videos', $videoArray);
         Event::assertDispatched(VideoCreated::class);
 

@@ -35,7 +35,7 @@
                                         {{$serie->teacher_name}}
                                     </a>
                                 </p>
-                                <p class="text-gray-600">Co-Founder / CTO</p>
+                                <p class="text-gray-600">{{$serie->formatted_for_humans_created_at}}</p>
                             </div>
                         </div>
                     </div>

@@ -48,7 +48,7 @@ class SanctumTokenControllerTest extends TestCase
         ]);
 
         $response = $this->postJson('/api/sanctum/token',[
-            'email' => 'another_email',
+            'email' => 'another_email@gmail.com',
             'password' => $user->password,
             'device_name' => $user->name . "'s device"
         ]);

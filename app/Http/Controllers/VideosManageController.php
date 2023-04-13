@@ -11,7 +11,7 @@ class VideosManageController extends Controller
 {
     public function index()
     {
-        return view('videos.manage.index',[
+        return view('videos.manage.index', [
             'videos' => Video::all()
         ]);
     }
@@ -19,11 +19,18 @@ class VideosManageController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'url' => 'required',
+        ]);
+
         $video = Video::create([
-            'title' =>$request->title,
-            'description' =>$request->description,
-            'url' =>$request->url,
-            'serie_id'=>$request->serie_id
+            'title' => $request->title,
+            'description' => $request->description,
+            'url' => $request->url,
+            'serie_id' => $request->serie_id,
+            'user_id' => $request->user_id
         ]);
 
         session()->flash('status', 'Successfully created');
@@ -41,7 +48,7 @@ class VideosManageController extends Controller
 
     public function edit($id)
     {
-        return view('videos.manage.edit',['video'=>Video::findOrFail($id)]);
+        return view('videos.manage.edit', ['video' => Video::findOrFail($id)]);
     }
 
     public function update(Request $request, $id)
@@ -52,14 +59,14 @@ class VideosManageController extends Controller
         $video->url = $request->url;
         $video->save();
 
-        session()->flash('status','Successfully updated');
+        session()->flash('status', 'Successfully updated');
         return redirect()->route('manage.videos');
     }
 
     public function destroy($id)
     {
         Video::find($id)->delete();
-        session()->flash('status','Successfully removed');
+        session()->flash('status', 'Successfully removed');
 
         return redirect()->route('manage.videos');
     }
