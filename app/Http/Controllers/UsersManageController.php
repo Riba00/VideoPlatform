@@ -22,13 +22,14 @@ class UsersManageController extends Controller
 
     public function store(Request $request)
     {
-        User::create([
+        $user = User::create([
             'name' =>$request->name,
             'email' =>$request->email,
             'password' =>Hash::make($request->password)
         ]);
 
         session()->flash('status','Successfully created');
+        add_personal_team($user);
         return redirect()->route('manage.users');
     }
 

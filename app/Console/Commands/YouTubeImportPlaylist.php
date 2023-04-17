@@ -61,26 +61,17 @@ class YoutubeImportPlaylist extends Command
         $playlist = Youtube::getPlaylistById($this->argument('playlistId'));
         $this->info('Serie name: ' . $playlist->snippet->title);
         $this->info('Creating serie...');
-//            dd($playlist->snippet);
 
-//            $path = Storage::download($playlist->snippet->thumbnails->maxres->url);
+        $temp = tmpfile();
+        $path = stream_get_meta_data($temp)['uri'];
+        copy($playlist->snippet->thumbnails->maxres->url, $path);
+        $path = Storage::disk('public')->putFile('series', new File($path));
 
-        $extension = pathinfo(storage_path(($playlist->snippet->thumbnails->maxres->url), PATHINFO_EXTENSION))['extension'];
-        $filename = Str::slug($playlist->snippet->title).'.'.$extension;
-        $path = 'app/public/series/' . $filename;
-        copy($playlist->snippet->thumbnails->maxres->url, storage_path($path));
-
-        //            dd(storage_path($path));
-//
-//        dd(Str::random(40));
-//            dd($path);
-//            dd($playlist->snippet->thumbnails->maxres->url);
-        //            https://i.ytimg.com/vi/ednlsVl-NHA/maxresdefault.jpg
 
         $serie = Serie::create([
             'title' => $playlist->snippet->title,
             'description' => $playlist->snippet->description,
-            'image' => $filename,
+            'image' => $path,
             'teacher_name' => 'Sergi Tur Badenas',
             'teacher_photo_url' => 'https://www.gravatar.com/avatar/046889f49471fd40d105eb76b9d83bf6'
         ]);

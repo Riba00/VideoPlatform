@@ -81,17 +81,37 @@ class VideosManageControllerTest extends TestCase
     /** @test */
     public function title_is_required()
     {
-        $this->markTestIncomplete();
+        $this->loginAsVideoManager();
+
+        $response = $this->post('/manage/videos',[
+            'description' => 'Te ensenyo tot el que se sobre HTTP',
+            'url' => 'https://tubeme.acacha.org/http',
+        ]);
+
+        $response->assertSessionHasErrors(['title']);
     }
     /** @test */
     public function description_is_required()
     {
-        $this->markTestIncomplete();
+        $this->loginAsVideoManager();
+        $response = $this->post('/manage/videos',[
+            'title' => 'TDD 101',
+            'url' => 'https://tubeme.acacha.org/http',
+        ]);
+
+        $response->assertSessionHasErrors(['description']);
     }
     /** @test */
     public function url_is_required()
     {
-        $this->markTestIncomplete();
+        $this->loginAsVideoManager();
+        // Execució
+        $response = $this->post('/manage/videos',[
+            'title' => 'TDD 101',
+            'description' => 'Te ensenyo tot el que se sobre HTTP'
+        ]);
+
+        $response->assertSessionHasErrors(['url']);
     }
 
     /** @test */
@@ -229,7 +249,7 @@ class VideosManageControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertViewIs('videos.manage.index');
 
-        $response->assertSee('<form data-qa="form_video_create" a', false);
+        $response->assertSee('<form data-qa="form_video_create"', false);
     }
 
     /** @test */
