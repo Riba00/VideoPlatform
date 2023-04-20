@@ -45,7 +45,7 @@ class Serie extends Model
     protected function imageUrl(): Attribute
     {
         return new Attribute(
-            get: fn ($value) => is_null($this->image) ? 'series/placeholder.png' : $this->image ,
+            get: fn ($value) => $this->image ?? 'series/placeholder.png',
         );
     }
 

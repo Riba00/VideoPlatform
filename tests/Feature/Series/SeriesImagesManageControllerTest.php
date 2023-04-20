@@ -2,9 +2,11 @@
 
 namespace Tests\Feature\Series;
 
+use App\Events\SeriesImageUpdated;
 use App\Models\Serie;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Tests\Feature\Traits\CanLogin;
 use Tests\TestCase;
@@ -30,10 +32,15 @@ class SeriesImagesManageControllerTest extends TestCase
         ]);
 
         Storage::fake('public');
+        Event::fake();
 
         $response = $this->put('/manage/series/'.$serie->id.'/image',[
             'image' => $file = UploadedFile::fake()->image('serie.jpg',960,540)
         ]);
+
+        Event::assertDispatched(SeriesImageUpdated::class,function ($event) use ($serie){
+            return !is_null($event->serie->image)&& $serie->is($event->serie);
+        });
 
         $response->assertRedirect();
 
