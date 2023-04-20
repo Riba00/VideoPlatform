@@ -11,6 +11,8 @@
         "doctrine/dbal": "^3.5",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^2.7",
+        "kanuu-io/kanuu-laravel": "^1.0",
+        "laravel/cashier-paddle": "^1.8",
         "laravel/framework": "^9.19",
         "laravel/jetstream": "^2.12",
         "laravel/sanctum": "^3.0",
