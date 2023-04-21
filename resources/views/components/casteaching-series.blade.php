@@ -1,49 +1,71 @@
 <div id="casteaching_series">
-    <div class="bg-white py-24 sm:py-32">
-        <div class="mx-auto max-w-7xl px-6 lg:px-8">
-            <div class="mx-auto max-w-2xl text-center">
-                <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Series</h2>
-                <p class="mt-2 text-lg leading-8 text-gray-600">Les series de casteaching</p>
+    <div class="relative bg-gray-50 pt-16 pb-20 px-4 sm:px-6 lg:pt-24 lg:pb-28 lg:px-8">
+        <div class="absolute inset-0">
+            <div class="bg-white h-1/3 sm:h-2/3"></div>
+        </div>
+        <div class="relative max-w-7xl mx-auto">
+            <div class="text-center">
+                <h2 class="text-3xl tracking-tight font-extrabold text-gray-900 sm:text-4xl">
+                    Series
+                </h2>
+                <p class="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
+                    Las series de casteaching
+                </p>
             </div>
-            <div class="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-                @foreach($series as $serie)
-                    <article class="flex flex-col items-start justify-between">
-                        <div class="relative w-full">
-                            <img class="h-48 w-full object-cover" src="/storage/{{$serie->image_url}}" alt="">
-                            <div class="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10"></div>
+            <div class="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
+                @foreach ($series as $serie)
+                    <div class="flex flex-col rounded-lg shadow-lg overflow-hidden">
+                        <div class="flex-shrink-0">
+                            <a href="{{$serie->url}}" class="block mt-2">
+                                <img class="h-48 w-full object-cover" src="/storage/{{$serie->image_url}}" alt="">
+                            </a>
                         </div>
-                        <div class="max-w-xl">
-                            <div class="mt-8 flex items-center gap-x-4 text-xs">
-                                <time datetime="2020-03-16"
-                                      class="text-gray-500">{{$serie->formatted_for_humans_created_at}}</time>
-                                <a href="#"
-                                   class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">Marketing</a>
-                            </div>
-                            <div class="group relative">
-                                <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-                                    <a href="#">
-                                        <span class="absolute inset-0"></span>
-                                        {{$serie->title}}
+                        <div class="flex-1 bg-white p-6 flex flex-col justify-between">
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-indigo-600">
+                                    <a href="#" class="hover:underline">
+                                        Screencasts
                                     </a>
-                                </h3>
-                                <p class="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">{{$serie->description}}</p>
+                                </p>
+                                <a href="{{$serie->url}}" class="block mt-2">
+                                    <p class="text-xl font-semibold text-gray-900">
+                                        {{ $serie->title }}
+                                    </p>
+                                    <p class="mt-3 text-base text-gray-500">
+                                        {{ $serie->description }}
+                                    </p>
+                                </a>
                             </div>
-                            <div class="relative mt-8 flex items-center gap-x-4">
-                                <img class="h-10 w-10 rounded-full"
-                                     src="{{ $serie->teacher_photo_url ?? 'https://avatars.dicebear.com/api/identicon/:seed.svg' }}"
-                                     alt="">
-                                <div class="text-sm leading-6">
-                                    <p class="font-semibold text-gray-900">
-                                        <a href="#">
-                                            <span class="absolute inset-0"></span>
+                            <div class="mt-6 flex items-center">
+                                <div class="flex-shrink-0">
+                                    <a href="#">
+                                        <span class="sr-only">{{ $serie->teacher_name }}</span>
+                                        <img class="h-10 w-10 rounded-full"
+                                             src="{{ $serie->teacher_photo_url ?? 'https://avatars.dicebear.com/api/identicon/:seed.svg' }}"
+                                             alt="">
+                                    </a>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">
+                                        <a href="#" class="hover:underline">
                                             {{ $serie->teacher_name ?? 'Anònim' }}
                                         </a>
                                     </p>
-                                    <p class="text-gray-600">{{$serie->formatted_for_humans_created_at}}</p>
+                                    <div class="flex space-x-1 text-sm text-gray-500">
+                                        <time datetime="2020-03-16">
+                                            {{ $serie->formatted_for_humans_created_at }}
+                                        </time>
+                                        <span aria-hidden="true">
+                  &middot;
+                </span>
+                                        <span>
+                  6 min read (TODO)
+                </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </article>
+                    </div>
                 @endforeach
             </div>
         </div>

@@ -20,6 +20,7 @@ class VideoTest extends TestCase
      */
     public function users_can_view_videos()
     {
+        $this->withoutExceptionHandling();
         //PREPARE
         //Wishful programming
         $video = Video::create([
