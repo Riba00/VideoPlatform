@@ -186,7 +186,8 @@ if (!function_exists('create_sample_videos')) {
         $video2 = Video::create([
             'title' => 'Video 2',
             'description' => 'Descripcio video 2',
-            'url' => 'https://www.youtube.com/embed/a4ez0CcEHV4'
+            'url' => 'https://www.youtube.com/embed/a4ez0CcEHV4',
+            'published_at' => Carbon::parse('December 13, 2020 8:00pm')
         ]);
         $video3 = Video::create([
             'title' => 'Video 3',
