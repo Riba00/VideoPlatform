@@ -6,6 +6,7 @@ use App\Http\Controllers\UsersManageController;
 use App\Http\Controllers\VideosController;
 use App\Http\Controllers\VideosManageController;
 use App\Http\Controllers\VideosManageVueController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Kanuu\Laravel\Facades\Kanuu;
 
@@ -25,9 +26,14 @@ Route::get('/', [\App\Http\Controllers\LandingPageController::class, 'show']);
 Route::get('/videos/{id}', [VideosController::class, 'show']);
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::get('/subscribe', function () {
+        return redirect(route('kanuu.redirect', Auth::user()));
+    })->name('subscribe');
 
     Route::get('/manage/series', [SeriesManageController::class, 'index'])->middleware(['can:series_manage_index'])
         ->name('manage.series');
