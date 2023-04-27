@@ -5,6 +5,7 @@ namespace App\Notifications;
 use App\Models\Video;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -43,6 +44,14 @@ class VideoCreated extends Notification
                     ->line("S'ha creat el video nou: " . $this->video->title)
                     ->action('Veure el video', url($this->video->url))
                     ->line("Gràcies per utilitzar la nostra aplicacio");
+    }
+
+    public function toBroadcast($notifiable)
+    {
+        return new BroadcastMessage([
+            'title' => $this->video->title,
+            'description' => $this->video->description,
+        ]);
     }
 
     /**

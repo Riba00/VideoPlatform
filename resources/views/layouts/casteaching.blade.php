@@ -32,7 +32,16 @@
         <!-- Page Content -->
         <main>
             {{ $slot }}
+            <div id="vueapp">
+                <notification></notification>
+            </div>
         </main>
     </div>
 </body>
 </html>
+<script>
+    import Notification from "../../js/components/Notification";
+    export default {
+        components: {Notification}
+    }
+</script>

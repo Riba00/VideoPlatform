@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\VideoCreated;
 use App\Models\Video;
+use Doctrine\DBAL\Exception\DatabaseDoesNotExist;
 use Illuminate\Http\Request;
 use Tests\Feature\Videos\VideosManageControllerTest;
 
