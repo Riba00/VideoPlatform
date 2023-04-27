@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import eventBus from "../bus";
 
 export default {
     name: "Notification",
